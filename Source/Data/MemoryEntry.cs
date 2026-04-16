@@ -1,0 +1,48 @@
+using Verse;
+
+namespace RimMind.Memory.Data
+{
+    public enum MemoryType { Work, Event, Manual, Dark }
+
+    public class MemoryEntry : IExposable
+    {
+        public string  id = string.Empty;
+        public string  content     = string.Empty;
+        public MemoryType type;
+        public int     tick;
+        public float   importance;
+        public bool    isPinned;
+        public string? pawnId;
+        public string? notes;
+
+        public MemoryEntry() { }
+
+        public static MemoryEntry Create(string content, MemoryType type, int tick, float importance, string? pawnId = null)
+        {
+            return new MemoryEntry
+            {
+                id = $"mem-{tick}",
+                content = content,
+                type = type,
+                tick = tick,
+                importance = importance,
+                isPinned = type == MemoryType.Dark,
+                pawnId = pawnId,
+            };
+        }
+
+        public void ExposeData()
+        {
+#pragma warning disable CS8601
+            Scribe_Values.Look(ref id,         "id");
+            Scribe_Values.Look(ref content,    "content",    string.Empty);
+            Scribe_Values.Look(ref type,       "type");
+            Scribe_Values.Look(ref tick,       "tick");
+            Scribe_Values.Look(ref importance, "importance");
+            Scribe_Values.Look(ref isPinned,   "isPinned");
+            Scribe_Values.Look(ref pawnId,     "pawnId",     null);
+            Scribe_Values.Look(ref notes,      "notes",      null);
+#pragma warning restore CS8601
+        }
+    }
+}
